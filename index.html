@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Meowbase: a fast database viewer for SQLite, PostgreSQL and MySQL</title>
+<meta name="description" content="Meowbase is a fast, minimal database viewer for SQLite, PostgreSQL and MySQL on macOS. Browse, query, edit, import and export, and let an AI agent look at your data on your terms.">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --line: #e4e4e8; --card: #f5f5f7;
+    --accent: #2f6fdb; --accent-fg: #ffffff; --shadow: 0 18px 50px rgba(0,0,0,.16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0b0c; --fg: #f2f2f4; --muted: #a0a0a8; --line: #26262a; --card: #151517;
+      --accent: #4c8cf5; --accent-fg: #ffffff; --shadow: 0 18px 50px rgba(0,0,0,.6);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  header.top { padding: 22px 0; display: flex; align-items: center; gap: 12px; }
+  header.top img { width: 40px; height: 40px; border-radius: 9px; }
+  header.top strong { font-size: 20px; letter-spacing: -.01em; }
+  .hero { text-align: center; padding: 36px 0 28px; }
+  .hero img.icon { width: 112px; height: 112px; border-radius: 25px; box-shadow: var(--shadow); }
+  h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.08; letter-spacing: -.03em; margin: 22px auto 12px; max-width: 760px; }
+  .lead { color: var(--muted); font-size: clamp(18px, 2.4vw, 21px); max-width: 640px; margin: 0 auto 26px; }
+  .button {
+    display: inline-block; background: var(--accent); color: var(--accent-fg); font-weight: 600;
+    padding: 13px 26px; border-radius: 999px; font-size: 18px;
+  }
+  .button:hover { text-decoration: none; filter: brightness(1.08); }
+  .meta { color: var(--muted); font-size: 14px; margin-top: 12px; min-height: 1.4em; }
+  .shot { margin: 34px auto 0; max-width: 880px; }
+  .shot img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow); display: block; }
+  section { padding: 44px 0 6px; }
+  h2 { font-size: 28px; letter-spacing: -.02em; margin: 0 0 16px; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .features li { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .features b { display: block; margin-bottom: 3px; }
+  .features span { color: var(--muted); font-size: 15.5px; }
+  ol.steps { padding-left: 22px; margin: 0; }
+  ol.steps li { margin: 6px 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .grid img { width: 100%; height: auto; border-radius: 10px; box-shadow: var(--shadow); display: block; }
+  .note { color: var(--muted); font-size: 15px; }
+  footer { margin-top: 56px; padding: 26px 0 44px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14.5px; }
+  footer p { margin: 6px 0; }
+  code { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: .92em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><img src="assets/icon.png" alt=""><strong>Meowbase</strong></header>
+
+  <div class="hero">
+    <img class="icon" src="assets/icon.png" alt="The Meowbase icon: a ginger cat on a stack of disks">
+    <h1>A fast, minimal database viewer</h1>
+    <p class="lead">For SQLite, PostgreSQL and MySQL. Built for the Mac, drawn on the GPU, and happy with a million rows.</p>
+    <a class="button" id="download" href="https://github.com/colgate666/meowbase-releases/releases/latest">Download for macOS</a>
+    <div class="meta" id="meta">Apple Silicon · macOS 11 or later</div>
+    <div class="shot"><img src="assets/table-editing.png" alt="Meowbase showing a table with an edited cell, a new row and a deleted row"></div>
+  </div>
+
+  <section>
+    <h2>What it does</h2>
+    <ul class="features">
+      <li><b>Browse any table</b><span>Pages are fetched as you scroll, so a table of millions of rows opens at once. Sort and filter on the whole table.</span></li>
+      <li><b>Query editor</b><span>SQL highlighting, run a statement, a selection or everything, stop it any time, and a history per connection.</span></li>
+      <li><b>Files of any size</b><span>Run a multi-gigabyte <code>.sql</code> dump from disk, including <code>pg_dump</code>'s COPY format, without loading it into memory.</span></li>
+      <li><b>Import and export</b><span>CSV, TSV and SQL for tables and for query results. Import a CSV into a table, or create a new table from it.</span></li>
+      <li><b>Edit in place</b><span>Change cells, add and delete rows, review the SQL, and commit it all in one transaction.</span></li>
+      <li><b>Your passwords stay yours</b><span>Saved in the macOS Keychain, never in a file. Mark a connection read-only when you only want to look.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Install</h2>
+    <ol class="steps">
+      <li>Download the disk image above and open it.</li>
+      <li>Drag <b>Meowbase</b> onto the <b>Applications</b> shortcut, and open it from there.</li>
+    </ol>
+    <p class="note">Meowbase is signed and notarized by Apple, so it opens without warnings. It needs a Mac with Apple Silicon. It was developed and tested on macOS 27; it is built to run on macOS 11 and later, but older versions have not been tried.</p>
+  </section>
+
+  <section>
+    <h2>Let an AI agent look, on your terms</h2>
+    <p>Meowbase includes a small server that lets Claude Desktop, Claude Code and other <a href="https://modelcontextprotocol.io">MCP</a> clients read the connections you choose. By default an agent can only read. If you allow it for a connection, an agent can <em>propose</em> a change, and nothing runs until you have read the exact statement in Meowbase and approved it. Open <b>Settings</b> (⌘,) to set it up, or install the extension for Claude Desktop:</p>
+    <p><a class="button" id="extension" href="https://github.com/colgate666/meowbase-releases/releases/latest" style="font-size:16px;padding:10px 20px">Download the Claude Desktop extension</a></p>
+    <div class="grid" style="margin-top:22px">
+      <img src="assets/agent-approval.png" alt="An AI agent asking permission to change data, with the exact statement shown">
+      <img src="assets/query-export.png" alt="Exporting the result of a query to CSV">
+      <img src="assets/table-from-csv.png" alt="Creating a table from a CSV file">
+    </div>
+  </section>
+
+  <footer>
+    <p><b>License.</b> Meowbase is licensed under the <a href="LICENSE">Apache License 2.0</a>; the app icon is not covered by it. Meowbase includes third-party software, each under its own license: <a href="THIRD_PARTY_NOTICES.txt">third-party notices</a>.</p>
+    <p><b>Private by design.</b> Meowbase has no analytics and no update checker, and connects only to the databases you add.</p>
+    <p><a href="https://github.com/colgate666/meowbase-releases/releases">All releases</a> · <a href="https://github.com/colgate666/meowbase-releases/issues">Report a problem</a></p>
+  </footer>
+</div>
+
+<script>
+// Fills in the newest release (its version, size, date and download links), so this
+// page never needs editing for a new version. Without JavaScript, or if GitHub cannot
+// be reached, the buttons go to the releases page, which works just as well.
+(function () {
+  var repo = "colgate666/meowbase-releases";
+  fetch("https://api.github.com/repos/" + repo + "/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (release) {
+      var dmg = null, ext = null;
+      (release.assets || []).forEach(function (a) {
+        if (/\.dmg$/i.test(a.name)) dmg = a;
+        if (/\.mcpb$/i.test(a.name)) ext = a;
+      });
+      if (dmg) {
+        document.getElementById("download").href = dmg.browser_download_url;
+        var mb = (dmg.size / 1048576).toFixed(0);
+        var date = new Date(release.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+        document.getElementById("meta").textContent =
+          (release.name || release.tag_name) + " · " + mb + " MB · " + date + " · Apple Silicon, macOS 11 or later";
+      }
+      if (ext) document.getElementById("extension").href = ext.browser_download_url;
+    })
+    .catch(function () {});
+})();
+</script>
+</body>
+</html>
