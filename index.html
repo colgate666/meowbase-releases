@@ -127,7 +127,7 @@
       if (dmg) {
         document.getElementById("download").href = dmg.browser_download_url;
         var mb = (dmg.size / 1048576).toFixed(0);
-        var date = new Date(release.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+        var date = new Date(release.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
         document.getElementById("meta").textContent =
           (release.name || release.tag_name) + " · " + mb + " MB · " + date + " · Apple Silicon, macOS 11 or later";
       }
